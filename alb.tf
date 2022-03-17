@@ -2,27 +2,25 @@ resource "aws_lb_target_group" "test" {
   name     = "tf-example-lb-tg"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  vpc_id   = module.vpc.vpc_id
+  target_type = "ip"
 }
 
-module "alb" {
-  source             = "terraform-aws-modules/alb/aws"
-  name               = "threetier"
+resource "aws_lb" "test" {
+  name               = "three-tier"
+  internal           = false
   load_balancer_type = "application"
-  vpc_id             = module.vpc.vpc_id
-  subnets            = module.vpc.public_subnets
   security_groups    = [module.web_server_sg.security_group_id]
-  target_groups = [resource.aws_lb_target_group.test.id]
+  subnets            = module.vpc.public_subnets
+  enable_deletion_protection = false
+}
 
-  http_tcp_listeners = [
-    {
-      port               = 80
-      protocol           = "HTTP"
-      target_group_index = 0
-    }
-  ]
-
-  tags = {
-    Environment = "threetier"
+resource "aws_lb_listener" "lb_listener_http" {
+   load_balancer_arn    = resource.aws_lb.test.arn
+   port                 = "80"
+   protocol             = "HTTP"
+   default_action {
+    target_group_arn = resource.aws_lb_target_group.test.arn
+    type             = "forward"
   }
 }
