@@ -7,37 +7,29 @@ module "db" {
   engine_version    = "5.7.25"
   instance_class    = "db.t3a.large"
   allocated_storage = 5
-
   db_name  = "threetier"
   username = "user"
   port     = "3306"
-
-  iam_database_authentication_enabled = true
-
   vpc_security_group_ids = ["vpc-063d33c2607f516b9"]
 
-  maintenance_window = "Mon:00:00-Mon:03:00"
-  backup_window      = "03:00-06:00"
+  // maintenance_window = "Mon:00:00-Mon:03:00"
+  // backup_window      = "03:00-06:00"
 
   # Enhanced Monitoring - see example for details on how to create the role
   # by yourself, in case you don't want to create it automatically
-  monitoring_interval    = "30"
-  monitoring_role_name   = "MyRDSMonitoringRole"
-  create_monitoring_role = true
+  // monitoring_interval    = "30"
+  // monitoring_role_name   = "MyRDSMonitoringRole"
+  // create_monitoring_role = true
 
-  tags = {
-    Owner       = "user"
-    Environment = "dev"
-  }
 }
-resource "aws_rds_cluster" "threetier" {
-  cluster_identifier      = "rds-cluster-threetier"
-  engine                  = "rds-mysql"
-  engine_version          = "5.7.25"
-  availability_zones      = ["us-east-2a", "us-east-2b", "us-east-2c"]
-  database_name           = "threetier"
-  master_username         = "admin"
-  master_password         = "bar"
-  backup_retention_period = 5
-  preferred_backup_window = "07:00-09:00"
-}
+// resource "aws_rds_cluster" "threetier" {
+//   cluster_identifier      = "rds-cluster-threetier"
+//   engine                  = "rds"
+//   engine_version          = "5.7.25"
+//   availability_zones      = ["us-east-2a", "us-east-2b", "us-east-2c"]
+//   database_name           = "threetier"
+//   master_username         = "admin"
+//   master_password         = "bar"
+//   backup_retention_period = 5
+// //   preferred_backup_window = "07:00-09:00"
+// }
