@@ -51,6 +51,6 @@ module "alb" {
   ]
 
   tags = {
-    Environment = "Threetier"
+    Environment = "threetier"
   }
 }
