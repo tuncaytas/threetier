@@ -30,3 +30,14 @@ module "db" {
     Environment = "dev"
   }
 }
+resource "aws_rds_cluster" "threetier" {
+  cluster_identifier      = "rds-cluster-threetier"
+  engine                  = "rds-mysql"
+  engine_version          = "5.7.mysql"
+  availability_zones      = ["us-east-2a", "us-east-2b", "us-east-2c"]
+  database_name           = "threetier"
+  master_username         = "admin"
+  master_password         = "bar"
+  backup_retention_period = 5
+  preferred_backup_window = "07:00-09:00"
+}
