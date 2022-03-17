@@ -10,16 +10,12 @@ module "alb" {
   subnets         = ["subnet-0b5d844078b6befec", "subnet-046be52b4e01cc29a", "subnet-082ab3abe05b94a65"]
   security_groups = ["sg-02315e4a266c2cefb"]
 
-  access_logs = {
-    bucket = "threetier-logs"
-  }
-
   target_groups = [
     {
       name_prefix      = "pref-"
       backend_protocol = "HTTP"
       backend_port     = 80
-      target_type      = "instance"
+      target_type      = "ip"
       targets = [
         {
           target_id = "i-0123456789abcdefg"

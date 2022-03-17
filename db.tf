@@ -33,7 +33,7 @@ module "db" {
 resource "aws_rds_cluster" "threetier" {
   cluster_identifier      = "rds-cluster-threetier"
   engine                  = "rds-mysql"
-  engine_version          = "5.7.mysql"
+  engine_version          = "5.7.25"
   availability_zones      = ["us-east-2a", "us-east-2b", "us-east-2c"]
   database_name           = "threetier"
   master_username         = "admin"
