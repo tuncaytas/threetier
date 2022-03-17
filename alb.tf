@@ -6,9 +6,9 @@ module "alb" {
 
   load_balancer_type = "application"
 
-  vpc_id             = "vpc-063d33c2607f516b9"
-  subnets            = ["subnet-0b5d844078b6befec", "subnet-046be52b4e01cc29a", "subnet-082ab3abe05b94a65"]
-  security_groups    = ["sg-02315e4a266c2cefb"]
+  vpc_id          = "vpc-063d33c2607f516b9"
+  subnets         = ["subnet-0b5d844078b6befec", "subnet-046be52b4e01cc29a", "subnet-082ab3abe05b94a65"]
+  security_groups = ["sg-02315e4a266c2cefb"]
 
   access_logs = {
     bucket = "threetier-logs"
@@ -23,11 +23,11 @@ module "alb" {
       targets = [
         {
           target_id = "i-0123456789abcdefg"
-          port = 80
+          port      = 80
         },
         {
           target_id = "i-a1b2c3d4e5f6g7h8i"
-          port = 8080
+          port      = 8080
         }
       ]
     }
