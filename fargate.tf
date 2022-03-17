@@ -1,5 +1,5 @@
 locals {
-  service_name = "example"
+  service_name = "threetier"
 }
 
 data "aws_caller_identity" "current" {}
