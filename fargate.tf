@@ -1,81 +1,54 @@
-// resource "aws_ecs_cluster" "cluster" {
-//   name = "example-ecs-cluster"
+resource "aws_ecs_task_definition" "wordpress" {
+  family                   = "test"
+  requires_compatibilities = ["FARGATE"]
+  network_mode             = "awsvpc"
+  cpu                      = 1024
+  memory                   = 2048
+  container_definitions    = <<TASK_DEFINITION
+[
+  {
+    "name": "wordpress",
+    "image": "docker.io/wordress:latest",
+    "cpu": 1024,
+    "memory": 2048,
+    "essential": true,
+    "portMappings": [
+      {
+        "containerPort": 80,
+        "hostPort": 80
+      }
+    ]
+  }
+]
+TASK_DEFINITION
 
-//   setting {
-//     name  = "containerInsights"
-//     value = "disabled"
-//   }
-// }
+  runtime_platform {
+    operating_system_family = "LINUX"
+    cpu_architecture        = "X86_64"
+  }
+}
 
-// resource "aws_ecs_cluster_capacity_providers" "cluster" {
-//   cluster_name = aws_ecs_cluster.cluster.name
+resource "aws_ecs_service" "wordpress" {
+  name            = "wordpressdb"
+  cluster         = aws_ecs_cluster.cluster.id
+  task_definition = aws_ecs_task_definition.wordpress.arn
+  desired_count   = 3
+  //   iam_role        = aws_iam_role.foo.arn
+  //   depends_on      = [aws_iam_role_policy.foo]
+  network_configuration {
+    security_groups  = [module.web_server_sg.security_group_id]
+    subnets          = module.vpc.public_subnets
+    assign_public_ip = false
+  }
 
-//   capacity_providers = ["FARGATE"]
 
-//   default_capacity_provider_strategy {
-//     capacity_provider = "FARGATE"
-//   }
-// }
-// resource "aws_ecs_task_definition" "test" {
-//   family                   = "test"
-//   requires_compatibilities = ["FARGATE"]
-//   network_mode             = "awsvpc"
-//   cpu                      = 4
-//   memory                   = 8192
-//   container_definitions    = <<TASK_DEFINITION
-// [
-//   {
-//     "name": "wordpress",
-//     "image": "http://docker.io/wordpress:latest",
-//     "cpu": 4,
-//     "memory": 8192,
-//     "essential": true
-//   }
-// ]
-// TASK_DEFINITION
-
-//   runtime_platform {
-//     operating_system_family = "docker"
-//     cpu_architecture        = "X86_64"
-//   }
-// }
-// resource "aws_lb_target_group" "threetier" {
-//   name        = "threetier"
-//   # 32 character max-length
-//   port        = "80"
-//   protocol    = "HTTP"
-//   vpc_id      = module.vpc.vpc_id
-//   target_type = "ip"
-
-//   health_check {
-//     path     = "/threetier"
-//     protocol = "HTTP"
-//     interval = 60
-//   }
-// }
-
-// resource "aws_lb_target_group_attachment" "threetier" {
-//   target_group_arn = aws_lb_target_group.threetier.arn
-//   target_id        = aws_ecs_service.service.id
-//   port             = 80
-// }
-
-// resource "aws_ecs_service" "service" {
-//   name            = "threetier"
-//   cluster         = module.ecs.this_ecs_cluster_id
-//   task_definition = aws_ecs_task_definition.service.arn
-//   desired_count   = var.task_count
-//   launch_type     = "FARGATE"
-
-//   network_configuration {
-//     security_groups = [aws_security_group.ecs_task.id]
-//     subnets         = module.vpc.private_subnets
-//   }
-
-//   load_balancer {
-//     target_group_arn = aws_lb_target_group.apitest.arn
-//     container_name   = "threetier"
-//     container_port   = var.app_port
-//   }
-// }
-
+  ordered_placement_strategy {
+    type  = "binpack"
+    field = "cpu"
+  }
+  load_balancer {
+    target_group_arn = resource.aws_lb_target_group.test.arn
+    container_name   = "wordpress"
+    container_port   = 80
+  }
+}
