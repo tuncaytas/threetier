@@ -47,7 +47,7 @@ resource "aws_ecs_service" "wordpress" {
     field = "cpu"
   }
   load_balancer {
-    target_group_arn = resource.aws_lb_target_group.test.arn
+    target_group_arn = aws_lb_target_group.test.arn
     container_name   = "wordpress"
     container_port   = 80
   }

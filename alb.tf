@@ -16,11 +16,11 @@ resource "aws_lb" "test" {
 }
 
 resource "aws_lb_listener" "lb_listener_http" {
-  load_balancer_arn = resource.aws_lb.test.arn
+  load_balancer_arn = aws_lb.test.arn
   port              = "80"
   protocol          = "HTTP"
   default_action {
-    target_group_arn = resource.aws_lb_target_group.test.arn
+    target_group_arn = aws_lb_target_group.test.arn
     type             = "forward"
   }
 }
