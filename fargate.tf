@@ -8,7 +8,7 @@ resource "aws_ecs_task_definition" "wordpress" {
 [
   {
     "name": "wordpress",
-    "image": "docker.io/wordress:latest",
+    "image": "docker.io/wordpress:latest",
     "cpu": 1024,
     "memory": 2048,
     "essential": true,
@@ -17,6 +17,9 @@ resource "aws_ecs_task_definition" "wordpress" {
         "containerPort": 80,
         "hostPort": 80
       }
+    ],
+    "environment": [
+      {"name": "WORDPRESS_DB_HOST", "value": "aws_db_instance.threetier.address"}
     ]
   }
 ]
