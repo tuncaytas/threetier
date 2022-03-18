@@ -38,7 +38,7 @@ resource "aws_ecs_service" "wordpress" {
   network_configuration {
     security_groups  = [module.web_server_sg.security_group_id]
     subnets          = module.vpc.public_subnets
-    assign_public_ip = false
+    // assign_public_ip = false
   }
 
 
