@@ -4,6 +4,15 @@ resource "aws_lb_target_group" "test" {
   protocol    = "HTTP"
   vpc_id      = module.vpc.vpc_id
   target_type = "ip"
+  health_check {
+   healthy_threshold   = "10"
+   interval            = "120"
+   protocol            = "HTTP"
+   matcher             = "200"
+   timeout             = "119"
+  //  path                = var.health_check_path
+   unhealthy_threshold = "2"
+  }
 }
 
 resource "aws_lb" "test" {
@@ -24,3 +33,4 @@ resource "aws_lb_listener" "lb_listener_http" {
     type             = "forward"
   }
 }
+
