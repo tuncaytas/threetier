@@ -5,13 +5,13 @@ resource "aws_lb_target_group" "test" {
   vpc_id      = module.vpc.vpc_id
   target_type = "ip"
   health_check {
-   healthy_threshold   = "10"
-   interval            = "120"
-   protocol            = "HTTP"
-   matcher             = "200"
-   timeout             = "119"
-  //  path                = var.health_check_path
-   unhealthy_threshold = "2"
+    enabled             = true
+    path                = "/"
+    healthy_threshold   = 3
+    unhealthy_threshold = 3
+    timeout             = 30
+    interval            = 60
+    protocol            = "HTTP"
   }
 }
 
