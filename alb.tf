@@ -4,15 +4,15 @@ resource "aws_lb_target_group" "test" {
   protocol    = "HTTP"
   vpc_id      = module.vpc.vpc_id
   target_type = "ip"
-  health_check {
-    enabled             = true
-    path                = "/"
-    healthy_threshold   = 3
-    unhealthy_threshold = 3
-    timeout             = 30
-    interval            = 60
-    protocol            = "HTTP"
-  }
+  // health_check {
+  //   enabled             = true
+  //   path                = "/"
+  //   healthy_threshold   = 3
+  //   unhealthy_threshold = 3
+  //   timeout             = 30
+  //   interval            = 60
+  //   protocol            = "HTTP"
+  // }
 }
 
 resource "aws_lb" "test" {

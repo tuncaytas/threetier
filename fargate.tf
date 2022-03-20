@@ -48,7 +48,7 @@ resource "aws_ecs_task_definition" "wordpress" {
       portMappings = [
         {
           containerPort = 80
-          hostPort      = 80
+          hostPort = 80
           protocol      = "tcp"
         }
       ]
@@ -63,7 +63,7 @@ resource "aws_ecs_task_definition" "wordpress" {
         },
         {
           name= "WORDPRESS_DB_PASSWORD" 
-          value= "bar"
+          value= "wordpress"
         },
         {
           name = "WORDPRESS_DB_NAME"
@@ -89,12 +89,13 @@ resource "aws_ecs_service" "wordpress" {
   task_definition = aws_ecs_task_definition.wordpress.arn
   desired_count   = 3
   launch_type = "FARGATE"
+  
   //   iam_role        = aws_iam_role.foo.arn
   //   depends_on      = [aws_iam_role_policy.foo]
   network_configuration {
     security_groups  = [module.web_server_sg.security_group_id]
     subnets          = module.vpc.public_subnets
-    // assign_public_ip = false
+    assign_public_ip  = "true"
   }
 
 
